@@ -247,7 +247,6 @@ function iniciar() {
     aplicarFiltros();
   });
 
-  // RETO: evento 'change' del select de orden
   const selectOrden = document.querySelector('#orden');
   selectOrden.addEventListener('change', (evento) => {
     estado.orden = evento.target.value;
