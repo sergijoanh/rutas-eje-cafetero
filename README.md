@@ -4,9 +4,9 @@ Catálogo de rutas turísticas del Eje Cafetero (Caldas, Risaralda y Quindío).
 Las tarjetas **no están escritas a mano**: JavaScript las construye a partir de los datos en `js/datos.js`,
 y se pueden filtrar por tipo y buscar por nombre o municipio.
 
-- **Aprendiz:** _tu nombre completo_
+- **Aprendiz:** Sergi Joan Henao González
 - **Ficha:** 3349882 · Tecnólogo en Análisis y Desarrollo de Software · SENA CDITI
-- **Sitio publicado (GitHub Pages):** _pega aquí tu enlace https://TU-USUARIO.github.io/rutas-eje-cafetero/_
+- **Sitio publicado (GitHub Pages):** https://sergijoanh.github.io/rutas-eje-cafetero/
 
 - **Lo que aprendí:** ver [APRENDIZAJES.md](APRENDIZAJES.md)
 
@@ -18,11 +18,11 @@ y se pueden filtrar por tipo y buscar por nombre o municipio.
 ## Guía de estilo
 | Token | Valor | Uso | Contraste |
 |---|---|---|---|
-| `--eje-primario` | `#1f5f3a` | Botones y acentos | Blanco encima: _x_:1 |
-| `--eje-secundario` | _completa_ | Navbar y pie | Blanco encima: _x_:1 |
+| `--eje-primario` | `#1f5f3a` | Botones y acentos | Blanco encima: 7.62:1 |
+| `--eje-secundario` | `#143d2b` | Navbar y pie | Blanco encima: 12.12:1 |
 | `--eje-fondo` | `#faf6ee` | Fondo de la página | - |
-| `--eje-texto` | _completa_ | Texto general | Sobre el fondo: _x_:1 |
-| `--eje-fuente` | _completa_ | Toda la página | - |
+| `--eje-texto` | `#2b2118` | Texto general | Sobre el fondo: 14.61:1 |
+| `--eje-fuente` | `"Segoe UI", system-ui, sans-serif` | Toda la página | - |
 
 ## Cómo verificar
 ```bash
