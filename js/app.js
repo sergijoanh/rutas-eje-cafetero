@@ -68,7 +68,22 @@ function normalizar(texto) {
  *      y el precio con ${formatearPrecio(ruta.precio)}
  * ============================================================ */
 function crearCard(ruta) {
-  // TODO: implementar
+  return `
+    <div class="col">
+      <article class="card h-100 ruta-card">
+        <img src="${ruta.imagen}" class="card-img-top" alt="">
+        <div class="card-body">
+          <span class="badge badge-${ruta.tipo}">${ETIQUETAS_TIPO[ruta.tipo]}</span>
+          <h3 class="card-title h5 mt-2">${ruta.nombre}</h3>
+          <p class="card-subtitle mb-2 text-body-secondary">${ruta.municipio}, ${ruta.departamento}</p>
+          <p class="card-text">${ruta.descripcion}</p>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center">
+          <span>${ruta.duracionHoras} h</span>
+          <strong class="precio">${formatearPrecio(ruta.precio)}</strong>
+        </div>
+      </article>
+    </div>`;
 }
 
 /* ============================================================
@@ -95,7 +110,12 @@ function crearCard(ruta) {
  *        mensaje.textContent = `${lista.length} rutas encontradas`
  * ============================================================ */
 function pintarRutas(lista, contenedor, mensaje) {
-  // TODO: implementar
+  contenedor.innerHTML = lista.map(crearCard).join('');
+  if (lista.length === 0) {
+    mensaje.textContent = 'No encontramos rutas con ese filtro. Prueba con otra búsqueda.';
+  } else {
+    mensaje.textContent = `${lista.length} rutas encontradas`;
+  }
 }
 
 /* ============================================================
@@ -117,7 +137,8 @@ function pintarRutas(lista, contenedor, mensaje) {
  *   - Si no -> solo las rutas cuyo ruta.tipo sea igual a tipo.
  * ============================================================ */
 function filtrarPorTipo(lista, tipo) {
-  // TODO: implementar
+  if (tipo === 'todos') return [...lista];
+  return lista.filter((ruta) => ruta.tipo === tipo);
 }
 
 /* ============================================================
@@ -136,7 +157,11 @@ function filtrarPorTipo(lista, tipo) {
  *   - Si no -> las rutas cuyo nombre O municipio (normalizados) incluyan el texto.
  * ============================================================ */
 function buscarPorTexto(lista, texto) {
-  // TODO: implementar
+  const busqueda = normalizar(texto);
+  if (busqueda === '') return [...lista];
+  return lista.filter((ruta) =>
+    normalizar(ruta.nombre).includes(busqueda) || normalizar(ruta.municipio).includes(busqueda)
+  );
 }
 
 /* ============================================================
@@ -145,7 +170,15 @@ function buscarPorTexto(lista, texto) {
  * Tus pruebas van en tests/reto.test.js.
  * ============================================================ */
 function ordenarRutas(lista, criterio) {
-  // TODO: implementar (RETO)
+  const copia = [...lista];
+  if (criterio === 'nombre') {
+    copia.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+  } else if (criterio === 'precio') {
+    copia.sort((a, b) => a.precio - b.precio);
+  } else if (criterio === 'duracion') {
+    copia.sort((a, b) => a.duracionHoras - b.duracionHoras);
+  }
+  return copia;
 }
 
 /* ============================================================
@@ -153,13 +186,14 @@ function ordenarRutas(lista, criterio) {
  * El estado guarda qué eligió la persona. Cada evento cambia el
  * estado y vuelve a pintar todo desde los DATOS.
  * ============================================================ */
-const estado = { tipo: 'todos', texto: '' };
+const estado = { tipo: 'todos', texto: '', orden: '' };
 
 function aplicarFiltros() {
   // ?? rutas -> mientras una función no esté implementada (devuelve undefined), se usan todas las rutas
   let resultado = filtrarPorTipo(rutas, estado.tipo) ?? rutas;
   resultado = buscarPorTexto(resultado, estado.texto) ?? resultado;
   // RETO: aquí también se aplica ordenarRutas(resultado, estado.orden)
+  resultado = ordenarRutas(resultado, estado.orden) ?? resultado;
   pintarRutas(resultado, document.querySelector('#lista-rutas'), document.querySelector('#resultado'));
 }
 
@@ -195,8 +229,30 @@ function iniciar() {
   const botones = document.querySelectorAll('[data-tipo]');
 
   // TODO G4.3 - paso 1: eventos 'click' de los botones
+  botones.forEach((boton) => {
+    boton.addEventListener('click', () => {
+      estado.tipo = boton.dataset.tipo;
+      botones.forEach((b) => {
+        b.classList.toggle('active', b === boton);
+        b.setAttribute('aria-pressed', b === boton ? 'true' : 'false');
+      });
+      aplicarFiltros();
+    });
+  });
 
   // TODO G4.3 - paso 2: evento 'input' del buscador
+  const buscador = document.querySelector('#buscador');
+  buscador.addEventListener('input', (evento) => {
+    estado.texto = evento.target.value;
+    aplicarFiltros();
+  });
+
+  // RETO: evento 'change' del select de orden
+  const selectOrden = document.querySelector('#orden');
+  selectOrden.addEventListener('change', (evento) => {
+    estado.orden = evento.target.value;
+    aplicarFiltros();
+  });
 
   aplicarFiltros(); // pinta todas las rutas al cargar
 }
